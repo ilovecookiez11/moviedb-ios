@@ -8,5 +8,5 @@
 import Foundation
 
 struct Profile {
-    
+    let username, avatar, name : String
 }

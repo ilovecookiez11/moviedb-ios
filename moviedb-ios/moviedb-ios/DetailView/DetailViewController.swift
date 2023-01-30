@@ -12,6 +12,7 @@ class DetailViewController: UIViewController {
 
     let detailViewModel = DetailViewModel()
     let darkBlue = UIColor(red: 0.01, green: 0.15, blue: 0.25, alpha: 1.00)
+    var myMediaTitle = ""
     
     @IBOutlet weak var posterImage: UIImageView!
     
@@ -29,6 +30,14 @@ class DetailViewController: UIViewController {
         view.backgroundColor = darkBlue
         setupBinders()
     }
+    @IBAction func favoriteTitle(_ sender: Any) {
+        let defaults = UserDefaults.standard
+        var array = defaults.object(forKey:"Favorites") as? [String] ?? [String]()
+        if (!array.contains(myMediaTitle)) {
+            array.append(myMediaTitle)
+        }
+        defaults.set(array, forKey: "Favorites")
+    }
     
     private func setupBinders() {
         detailViewModel.myTitle.bind{ [weak self] myTitle in
@@ -40,6 +49,7 @@ class DetailViewController: UIViewController {
                     self?.posterImage.layer.cornerRadius = 14
                     self?.posterImage.kf.setImage(with: url, options: [.processor(processor)])
                     self?.titleLabel.text = title?.name
+                    self?.myMediaTitle = title!.name
                     
                     let ratingDouble = title?.voteAverage.doubleValue
                     let rating = String(format: "%.1f", ratingDouble!)
